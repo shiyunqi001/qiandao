@@ -21,11 +21,23 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-
+def geturl(x):
+    a = requests.get(x)
+    if (len(a.text)<20000):
+        while(len(a.text)<2000):
+            url=re.findall('url=(.*?)"></html>',a.text)
+            a=requests.get(url[0])
+        a.encoding = a.apparent_encoding
+        raw=a.text
+        link=re.findall('<p><a href="https://(.*?)/" target="_blank">搜书吧入口</a></p>',raw)
+        return(link[0])
+    else:
+        x=re.findall('https://(.*?)/',x)[0]
+        return x
 class SouShuBaClient:
 
     def __init__(self, hostname: str, username: str, password: str, questionid: str = '0', answer: str = None,
-                 proxies: dict | None = None):
+                 proxies: dict =None):
         self.session: requests.Session = requests.Session()
         self.hostname = hostname
         self.username = username
@@ -68,9 +80,10 @@ class SouShuBaClient:
         }
 
         resp = self.session.post(login_url, proxies=self.proxies, data=payload, headers=headers)
-        if resp.status_code == 200 and self.session.cookies.get('yj0M_a233_auth'):
+        if resp.status_code == 200:
             logger.info(f'Welcome {self.username}!')
         else:
+            print(resp.text)
             raise ValueError('Verify Failed! Check your username and password!')
 
     def credit(self):
@@ -113,9 +126,12 @@ class SouShuBaClient:
 
 if __name__ == '__main__':
     try:
-        client = SouShuBaClient(os.environ.get('SOUSHUBA_HOSTNAME', 'www.apr.soushu2029.com'),
-                                os.environ.get('SOUSHUBA_USERNAME'),
-                                os.environ.get('SOUSHUBA_PASSWORD'))
+        # client = SouShuBaClient(os.environ.get('SOUSHUBA_HOSTNAME', 'www.apr.soushu2029.com'),
+        #                         os.environ.get('SOUSHUBA_USERNAME'),
+        #                         os.environ.get('SOUSHUBA_PASSWORD'))
+        client = SouShuBaClient(geturl(os.environ.get('SOUSHUBA_HOSTNAME', 'http://soushu2023.com/')),
+                                 os.environ.get('SOUSHUBA_USERNAME'),
+                                 os.environ.get('SOUSHUBA_PASSWORD'))
         client.login()
         client.space()
         credit = client.credit()
