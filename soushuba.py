@@ -88,13 +88,10 @@ class SouShuBaClient:
         if resp.status_code == 200:
             logger.info(f'Welcome {self.username}!')
         else:
-            print(resp.text)
             raise ValueError('Verify Failed! Check your username and password!')
     def getcoin(self):
         resp=self.session.get('https://downdown.downdownbook.com/home.php?mod=spacecp&ac=credit&op=base')
-        print(resp.text)
         coin=re.findall('<li class="xi1 cl"><em> 银币: </em>(.*?)  &nbsp; </li>',resp.text)
-        print(coin)
         return coin[0]
     def credit(self):
         credit_url = f"https://{self.hostname}/home.php?mod=spacecp&ac=credit&showcredit=1&inajax=1&ajaxtarget=extcreditmenu_menu"
