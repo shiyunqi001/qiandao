@@ -90,7 +90,10 @@ class SouShuBaClient:
         else:
             raise ValueError('Verify Failed! Check your username and password!')
     def getcoin(self):
-        resp=self.session.get('https://downdown.downdownbook.com/home.php?mod=spacecp&ac=credit&op=base')
+        headers = copy(self._common_headers)
+        headers["origin"] = f'https://{self.hostname}'
+        headers["referer"] = f'https://{self.hostname}/'
+        resp=self.session.get('https://downdown.downdownbook.com/home.php?mod=spacecp&ac=credit&op=base',headers=headers)
         coin=re.findall('<li class="xi1 cl"><em> 银币: </em>(.*?)  &nbsp; </li>',resp.text)
         return coin[0]
     def credit(self):
