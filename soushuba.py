@@ -20,7 +20,12 @@ ch = logging.StreamHandler(stream=sys.stdout)
 ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-
+def sendmsg(msg):
+    data = {
+        "qq": "1351714146",
+        "msg": msg,
+    }
+    requests.post('http://home.undem.cn:6789/send/bf89f9759a9478d2979fd6ab13152fc6',data=data)
 def geturl(x):
     a = requests.get(x)
     if (len(a.text)<20000):
@@ -85,7 +90,12 @@ class SouShuBaClient:
         else:
             print(resp.text)
             raise ValueError('Verify Failed! Check your username and password!')
-
+    def getcoin(self):
+        resp=self.session.get('https://downdown.downdownbook.com/home.php?mod=spacecp&ac=credit&op=base')
+        print(resp.text)
+        coin=re.findall('<li class="xi1 cl"><em> 银币: </em>(.*?)  &nbsp; </li>',resp.text)
+        print(coin)
+        return coin[0]
     def credit(self):
         credit_url = f"https://{self.hostname}/home.php?mod=spacecp&ac=credit&showcredit=1&inajax=1&ajaxtarget=extcreditmenu_menu"
 
@@ -134,6 +144,8 @@ if __name__ == '__main__':
                                  os.environ.get('SOUSHUBA_PASSWORD'))
         client.login()
         client.space()
+        coin=client.getcoin()
+        sendmsg("今日7枚银币已经成功获取,当前银币总数："+coin)
         credit = client.credit()
     except Exception as e:
         logger.error(e)
