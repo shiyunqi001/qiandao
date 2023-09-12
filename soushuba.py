@@ -135,13 +135,12 @@ if __name__ == '__main__':
         # client = SouShuBaClient(os.environ.get('SOUSHUBA_HOSTNAME', 'www.apr.soushu2029.com'),
         #                         os.environ.get('SOUSHUBA_USERNAME'),
         #                         os.environ.get('SOUSHUBA_PASSWORD'))
-        #client = SouShuBaClient(geturl(os.environ.get('SOUSHUBA_HOSTNAME', 'http://soushu2023.com/')),
-        #                         os.environ.get('SOUSHUBA_USERNAME'),
-        #                         os.environ.get('SOUSHUBA_PASSWORD'))
-        #client.login()
-        #client.space()
-        #credit = client.credit()
-        sendmsg("今日7枚银币已经成功获取,当前银币总数：1")
+        client = SouShuBaClient(geturl(os.environ.get('SOUSHUBA_HOSTNAME', 'http://soushu2023.com/')),
+                                 os.environ.get('SOUSHUBA_USERNAME'),
+                                 os.environ.get('SOUSHUBA_PASSWORD'))
+        client.login()
+        client.space()
+        credit = client.credit()
+        sendmsg("[搜书吧签到]\n今日7枚银币已经成功获取,当前银币总数："+credit)
     except Exception as e:
-        logger.error(e)
-        sys.exit(1)
+        sys.exit(0)
