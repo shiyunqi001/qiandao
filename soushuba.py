@@ -89,13 +89,6 @@ class SouShuBaClient:
             logger.info(f'Welcome {self.username}!')
         else:
             raise ValueError('Verify Failed! Check your username and password!')
-    def getcoin(self):
-        headers = copy(self._common_headers)
-        headers["origin"] = f'https://{self.hostname}'
-        headers["referer"] = f'https://{self.hostname}/'
-        resp=self.session.get('https://downdown.downdownbook.com/home.php?mod=spacecp&ac=credit&op=base',headers=headers)
-        coin=re.findall('<li class="xi1 cl"><em> 银币: </em>(.*?)  &nbsp; </li>',resp.text)
-        return coin[0]
     def credit(self):
         credit_url = f"https://{self.hostname}/home.php?mod=spacecp&ac=credit&showcredit=1&inajax=1&ajaxtarget=extcreditmenu_menu"
 
@@ -144,9 +137,8 @@ if __name__ == '__main__':
                                  os.environ.get('SOUSHUBA_PASSWORD'))
         client.login()
         client.space()
-        coin=client.getcoin()
-        sendmsg("今日7枚银币已经成功获取,当前银币总数："+coin)
         credit = client.credit()
+        sendmsg("今日7枚银币已经成功获取,当前银币总数："+credit)
     except Exception as e:
         logger.error(e)
         sys.exit(1)
