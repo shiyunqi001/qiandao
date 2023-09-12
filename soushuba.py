@@ -138,7 +138,7 @@ if __name__ == '__main__':
         #client.login()
         #client.space()
         #credit = client.credit()
-        sendmsg("今日7枚银币已经成功获取,当前银币总数："+credit)
+        sendmsg("今日7枚银币已经成功获取,当前银币总数：1")
     except Exception as e:
         logger.error(e)
         sys.exit(1)
