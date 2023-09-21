@@ -143,4 +143,5 @@ if __name__ == '__main__':
         credit = client.credit()
         sendmsg("[搜书吧签到]\n今日7枚银币已经成功获取,当前银币总数："+credit)
     except Exception as e:
+        logger.error(e)
         sys.exit(1)
