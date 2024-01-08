@@ -13,6 +13,7 @@ jobs:
       SOUSHUBA_HOSTNAME: ${{ secrets.SOUSHUBA_HOSTNAME }}
       SOUSHUBA_USERNAME: ${{ secrets.SOUSHUBA_USERNAME }}
       SOUSHUBA_PASSWORD: ${{ secrets.SOUSHUBA_PASSWORD }}
+      PUSH_ADDR: ${{ secrets.PUSH.ADDR }}
 
     steps:
       - name: Check out repository code
